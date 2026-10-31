@@ -1,0 +1,128 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Gaussian splats: shelter map",
+  "description": "Every neighbouring building becomes a 2D Gaussian splat. Added up they are a density map of where the block is tall (shelter and shade); composited front to back by height they are the splat render of the block, the same blending rule as 3D Gaussian splatting.",
+  "group": "Analysis and vision",
+  "nodes": [
+    {
+      "id": "ctx",
+      "type": "context",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "style": "Manhattan",
+        "ring": 3,
+        "heightScale": 1,
+        "seed": 7
+      }
+    },
+    {
+      "id": "spl",
+      "type": "splats",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {
+        "hRef": 150
+      }
+    },
+    {
+      "id": "add",
+      "type": "splatField",
+      "position": {
+        "x": 560,
+        "y": 0
+      },
+      "params": {
+        "n": 56,
+        "extent": 260,
+        "mode": "Additive",
+        "gain": 1
+      }
+    },
+    {
+      "id": "comp",
+      "type": "splatField",
+      "position": {
+        "x": 560,
+        "y": 260
+      },
+      "params": {
+        "n": 56,
+        "extent": 260,
+        "mode": "Composite",
+        "gain": 1
+      }
+    },
+    {
+      "id": "shelter",
+      "type": "inspect",
+      "position": {
+        "x": 840,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "render",
+      "type": "inspect",
+      "position": {
+        "x": 840,
+        "y": 260
+      },
+      "params": {}
+    },
+    {
+      "id": "r1",
+      "type": "readout",
+      "position": {
+        "x": 840,
+        "y": 520
+      },
+      "params": {}
+    },
+    {
+      "id": "r2",
+      "type": "readout",
+      "position": {
+        "x": 1060,
+        "y": 520
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "ctx.context",
+      "to": "spl.context"
+    },
+    {
+      "from": "spl.splats",
+      "to": "add.splats"
+    },
+    {
+      "from": "spl.splats",
+      "to": "comp.splats"
+    },
+    {
+      "from": "add.field",
+      "to": "shelter.value"
+    },
+    {
+      "from": "comp.field",
+      "to": "render.value"
+    },
+    {
+      "from": "add.max",
+      "to": "r1.value"
+    },
+    {
+      "from": "comp.max",
+      "to": "r2.value"
+    }
+  ]
+}

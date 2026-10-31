@@ -1,0 +1,103 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Demo: logistic map",
+  "description": "The logistic map: the same loop, a different behaviour (settling, cycling, chaos).",
+  "group": "Loop basics",
+  "nodes": [
+    {
+      "id": "x0",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "value": 0.2,
+        "min": 0,
+        "max": 1
+      }
+    },
+    {
+      "id": "r",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 190
+      },
+      "params": {
+        "value": 3.7,
+        "min": 0,
+        "max": 4
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "step",
+      "type": "logistic",
+      "position": {
+        "x": 520,
+        "y": 0
+      },
+      "params": {
+        "r": 3.7
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 790,
+        "y": 0
+      },
+      "params": {
+        "kind": "Repeat",
+        "iterations": 120,
+        "tolerance": 0
+      }
+    },
+    {
+      "id": "view",
+      "type": "inspect",
+      "position": {
+        "x": 1060,
+        "y": 0
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "x0.value",
+      "to": "start.initial"
+    },
+    {
+      "from": "r.value",
+      "to": "step.r"
+    },
+    {
+      "from": "start.state",
+      "to": "step.x"
+    },
+    {
+      "from": "step.x",
+      "to": "end.result"
+    },
+    {
+      "from": "end.result",
+      "to": "view.value"
+    },
+    {
+      "from": "end.history",
+      "to": "view.history"
+    }
+  ]
+}

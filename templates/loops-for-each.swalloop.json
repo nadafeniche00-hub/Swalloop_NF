@@ -1,0 +1,92 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Demo: For each (squares of 1..8)",
+  "description": "A For each: the body runs once per item, independently, and returns the list of results.",
+  "group": "Loop basics",
+  "nodes": [
+    {
+      "id": "items",
+      "type": "range",
+      "position": {
+        "x": 0,
+        "y": 190
+      },
+      "params": {
+        "count": 8,
+        "start": 1,
+        "step": 1
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "sq",
+      "type": "math",
+      "position": {
+        "x": 520,
+        "y": 0
+      },
+      "params": {
+        "op": "×",
+        "a": 0,
+        "b": 0
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "params": {
+        "kind": "For each",
+        "iterations": 150,
+        "tolerance": 0.002
+      }
+    },
+    {
+      "id": "view",
+      "type": "inspect",
+      "position": {
+        "x": 1080,
+        "y": 0
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "start.item",
+      "to": "sq.a"
+    },
+    {
+      "from": "start.item",
+      "to": "sq.b"
+    },
+    {
+      "from": "sq.result",
+      "to": "end.result"
+    },
+    {
+      "from": "items.list",
+      "to": "end.items"
+    },
+    {
+      "from": "end.result",
+      "to": "view.value"
+    },
+    {
+      "from": "end.history",
+      "to": "view.history"
+    }
+  ]
+}

@@ -1,0 +1,299 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Fourier: simplify the loft",
+  "description": "Low-pass the result of the loop two ways: the floor-by-floor width profile (four harmonics describe the whole taper, which is what a panel layout needs) and the outline of the top floor (fewer harmonics, a simpler outline to build). Try Rotation in the Floor profile node: it has a step where the optimiser flips orientation, and a low-pass rings there (the Gibbs effect).",
+  "group": "Analysis and vision",
+  "nodes": [
+    {
+      "id": "ctx",
+      "type": "context",
+      "position": {
+        "x": 0,
+        "y": 420
+      },
+      "params": {
+        "style": "Manhattan",
+        "ring": 3,
+        "heightScale": 1,
+        "seed": 7
+      }
+    },
+    {
+      "id": "tower",
+      "type": "tower",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "floors": 60,
+        "floorH": 4,
+        "width": 36,
+        "depth": 36,
+        "twist": 0,
+        "round": 0.2,
+        "source": "Initial"
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 300,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "wind",
+      "type": "wind",
+      "position": {
+        "x": 540,
+        "y": 0
+      },
+      "params": {
+        "speed": 40,
+        "from": 300,
+        "alpha": 0.25
+      }
+    },
+    {
+      "id": "stream",
+      "type": "orient",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "params": {
+        "rate": 0.2,
+        "aspect": 1.8,
+        "round": 0.8,
+        "sunWeight": 0.7,
+        "sunAz": 150,
+        "minW": 0,
+        "minD": 0,
+        "minRadius": 0,
+        "maxStep": 90,
+        "maxTwist": 0,
+        "smooth": 0,
+        "search": "Grid"
+      }
+    },
+    {
+      "id": "struct",
+      "type": "structure",
+      "position": {
+        "x": 1050,
+        "y": 0
+      },
+      "params": {
+        "allow": 6,
+        "load": 10,
+        "fraction": 0.08,
+        "relax": 0.3,
+        "minPlate": 20,
+        "maxPlate": 60
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 1330,
+        "y": 0
+      },
+      "params": {
+        "kind": "Repeat",
+        "iterations": 150,
+        "tolerance": 0.01
+      }
+    },
+    {
+      "id": "prof",
+      "type": "profile",
+      "position": {
+        "x": 1590,
+        "y": 0
+      },
+      "params": {
+        "quantity": "Width"
+      }
+    },
+    {
+      "id": "four",
+      "type": "fourier",
+      "position": {
+        "x": 1860,
+        "y": 0
+      },
+      "params": {
+        "keep": 4,
+        "edge": "Mirror"
+      }
+    },
+    {
+      "id": "both",
+      "type": "pack",
+      "position": {
+        "x": 2130,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "loft",
+      "type": "inspect",
+      "position": {
+        "x": 2400,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "out",
+      "type": "outline",
+      "position": {
+        "x": 1590,
+        "y": 330
+      },
+      "params": {
+        "floor": 999
+      }
+    },
+    {
+      "id": "fc",
+      "type": "fourierCurve",
+      "position": {
+        "x": 1860,
+        "y": 330
+      },
+      "params": {
+        "keep": 3
+      }
+    },
+    {
+      "id": "rings",
+      "type": "pack",
+      "position": {
+        "x": 2130,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "outlines",
+      "type": "inspect",
+      "position": {
+        "x": 2400,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "r1",
+      "type": "readout",
+      "position": {
+        "x": 2130,
+        "y": 120
+      },
+      "params": {}
+    },
+    {
+      "id": "r2",
+      "type": "readout",
+      "position": {
+        "x": 2130,
+        "y": 450
+      },
+      "params": {}
+    },
+    {
+      "id": "r3",
+      "type": "readout",
+      "position": {
+        "x": 2400,
+        "y": 450
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "tower.tower",
+      "to": "start.initial"
+    },
+    {
+      "from": "start.state",
+      "to": "wind.tower"
+    },
+    {
+      "from": "ctx.context",
+      "to": "wind.context"
+    },
+    {
+      "from": "wind.tower",
+      "to": "stream.tower"
+    },
+    {
+      "from": "stream.tower",
+      "to": "struct.tower"
+    },
+    {
+      "from": "struct.tower",
+      "to": "end.result"
+    },
+    {
+      "from": "end.result",
+      "to": "prof.tower"
+    },
+    {
+      "from": "prof.values",
+      "to": "four.signal"
+    },
+    {
+      "from": "prof.values",
+      "to": "both.a"
+    },
+    {
+      "from": "four.smooth",
+      "to": "both.b"
+    },
+    {
+      "from": "both.list",
+      "to": "loft.value"
+    },
+    {
+      "from": "four.retained",
+      "to": "r1.value"
+    },
+    {
+      "from": "end.result",
+      "to": "out.tower"
+    },
+    {
+      "from": "out.points",
+      "to": "fc.points"
+    },
+    {
+      "from": "out.points",
+      "to": "rings.a"
+    },
+    {
+      "from": "fc.smooth",
+      "to": "rings.b"
+    },
+    {
+      "from": "rings.list",
+      "to": "outlines.value"
+    },
+    {
+      "from": "fc.deviation",
+      "to": "r2.value"
+    },
+    {
+      "from": "fc.areaKept",
+      "to": "r3.value"
+    }
+  ]
+}

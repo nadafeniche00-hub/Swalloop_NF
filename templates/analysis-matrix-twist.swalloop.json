@@ -1,0 +1,243 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Matrix powers: twisting tower",
+  "description": "One 3x3 matrix (turn a little, shrink a little) applied floor after floor: floor i is the base outline times M to the power i. A For each loop builds every outline; the principal axes of the top outline read back the twist.",
+  "group": "Analysis and vision",
+  "nodes": [
+    {
+      "id": "base",
+      "type": "polygon",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "n": 6,
+        "radius": 24,
+        "aspect": 1.6,
+        "rotate": 0
+      }
+    },
+    {
+      "id": "turn",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 260
+      },
+      "params": {
+        "value": 3,
+        "min": -10,
+        "max": 10
+      }
+    },
+    {
+      "id": "shrink",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 390
+      },
+      "params": {
+        "value": 0.985,
+        "min": 0.9,
+        "max": 1.02
+      }
+    },
+    {
+      "id": "m",
+      "type": "affine",
+      "position": {
+        "x": 280,
+        "y": 260
+      },
+      "params": {
+        "rotate": 0,
+        "sx": 1,
+        "sy": 1,
+        "tx": 0,
+        "ty": 0,
+        "px": 0,
+        "py": 0
+      }
+    },
+    {
+      "id": "floors",
+      "type": "range",
+      "position": {
+        "x": 280,
+        "y": 520
+      },
+      "params": {
+        "count": 30,
+        "start": 0,
+        "step": 1
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 560,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "mp",
+      "type": "matpow",
+      "position": {
+        "x": 820,
+        "y": 0
+      },
+      "params": {
+        "k": 1
+      }
+    },
+    {
+      "id": "ap",
+      "type": "applyMatrix",
+      "position": {
+        "x": 1080,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 1340,
+        "y": 0
+      },
+      "params": {
+        "kind": "For each",
+        "iterations": 150,
+        "tolerance": 0.002
+      }
+    },
+    {
+      "id": "view",
+      "type": "inspect",
+      "position": {
+        "x": 1620,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "top",
+      "type": "matpow",
+      "position": {
+        "x": 820,
+        "y": 330
+      },
+      "params": {
+        "k": 29
+      }
+    },
+    {
+      "id": "topPts",
+      "type": "applyMatrix",
+      "position": {
+        "x": 1080,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "axes",
+      "type": "pca",
+      "position": {
+        "x": 1340,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "r1",
+      "type": "readout",
+      "position": {
+        "x": 1620,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "r2",
+      "type": "readout",
+      "position": {
+        "x": 1620,
+        "y": 440
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "turn.value",
+      "to": "m.rotate"
+    },
+    {
+      "from": "shrink.value",
+      "to": "m.sx"
+    },
+    {
+      "from": "shrink.value",
+      "to": "m.sy"
+    },
+    {
+      "from": "m.matrix",
+      "to": "mp.m"
+    },
+    {
+      "from": "start.item",
+      "to": "mp.k"
+    },
+    {
+      "from": "mp.matrix",
+      "to": "ap.m"
+    },
+    {
+      "from": "base.points",
+      "to": "ap.points"
+    },
+    {
+      "from": "ap.points",
+      "to": "end.result"
+    },
+    {
+      "from": "floors.list",
+      "to": "end.items"
+    },
+    {
+      "from": "end.result",
+      "to": "view.value"
+    },
+    {
+      "from": "m.matrix",
+      "to": "top.m"
+    },
+    {
+      "from": "top.matrix",
+      "to": "topPts.m"
+    },
+    {
+      "from": "base.points",
+      "to": "topPts.points"
+    },
+    {
+      "from": "topPts.points",
+      "to": "axes.points"
+    },
+    {
+      "from": "axes.angle",
+      "to": "r1.value"
+    },
+    {
+      "from": "axes.aspect",
+      "to": "r2.value"
+    }
+  ]
+}

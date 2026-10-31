@@ -1,0 +1,116 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Demo: Newton square root",
+  "description": "A number iterates toward the square root of another: the loop on plain numbers, no geometry.",
+  "group": "Loop basics",
+  "nodes": [
+    {
+      "id": "x0",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "value": 1,
+        "min": 0.1,
+        "max": 10
+      }
+    },
+    {
+      "id": "a",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 190
+      },
+      "params": {
+        "value": 2,
+        "min": 0.5,
+        "max": 50
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "step",
+      "type": "newton",
+      "position": {
+        "x": 520,
+        "y": 0
+      },
+      "params": {
+        "a": 2
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 790,
+        "y": 0
+      },
+      "params": {
+        "kind": "Repeat",
+        "iterations": 20,
+        "tolerance": 0
+      }
+    },
+    {
+      "id": "view",
+      "type": "inspect",
+      "position": {
+        "x": 1060,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "count",
+      "type": "readout",
+      "position": {
+        "x": 1060,
+        "y": 190
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "x0.value",
+      "to": "start.initial"
+    },
+    {
+      "from": "a.value",
+      "to": "step.a"
+    },
+    {
+      "from": "start.state",
+      "to": "step.x"
+    },
+    {
+      "from": "step.x",
+      "to": "end.result"
+    },
+    {
+      "from": "end.result",
+      "to": "view.value"
+    },
+    {
+      "from": "end.history",
+      "to": "view.history"
+    },
+    {
+      "from": "end.count",
+      "to": "count.value"
+    }
+  ]
+}

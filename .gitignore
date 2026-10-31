@@ -1,0 +1,14 @@
+node_modules/
+dist/
+release/
+.claude/
+*.log
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+
+# .NET build output
+dotnet/**/bin/
+dotnet/**/obj/
+*.gha

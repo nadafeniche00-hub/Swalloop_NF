@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- netstandard2.0 so the same assembly loads in Rhino 8 on .NET Framework 4.8 and on .NET 7/8.
+       No NuGet dependencies on purpose: Rhino ships its own copies of common libraries, and a second
+       version of System.Text.Json or Newtonsoft.Json inside a plugin is a classic source of conflicts. -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>Swalloop.Core</RootNamespace>
+    <AssemblyName>Swalloop.Core</AssemblyName>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+
+</Project>

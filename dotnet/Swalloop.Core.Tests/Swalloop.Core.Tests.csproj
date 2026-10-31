@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- A console test runner on purpose: no test framework to restore, runs anywhere `dotnet run` does,
+       and exits non-zero on any failure. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <RootNamespace>Swalloop.Core.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Swalloop.Core\Swalloop.Core.csproj" />
+  </ItemGroup>
+
+</Project>

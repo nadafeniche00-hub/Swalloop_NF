@@ -1,0 +1,1 @@
+{"name":"Demo: Newton square root","nodes":{"x0":{"outputs":{"value":1}},"a":{"outputs":{"value":2}},"start":{"outputs":{"state":1,"index":0,"item":null}},"step":{"outputs":{"x":1.5}},"end":{"outputs":{"result":1.414213562373095,"history":{"count":20,"max":20,"frames":21,"lastEqualsResult":true},"count":20,"delta":0}},"view":{"outputs":{}},"count":{"outputs":{}}}}

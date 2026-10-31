@@ -1,0 +1,1 @@
+{"name":"Demo: For each (squares of 1..8)","nodes":{"items":{"outputs":{"list":[1,2,3,4,5,6,7,8]}},"start":{"outputs":{"state":null,"index":0,"item":null}},"sq":{"outputs":{"result":"NaN"}},"end":{"outputs":{"result":[1,4,9,16,25,36,49,64],"history":{"count":8,"max":8,"frames":9,"lastEqualsResult":true},"count":8,"delta":0}},"view":{"outputs":{}}}}

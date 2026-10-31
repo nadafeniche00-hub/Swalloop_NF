@@ -1,0 +1,1 @@
+{"name":"Demo: While (double until 1000)","nodes":{"x0":{"outputs":{"value":1}},"start":{"outputs":{"state":1,"index":0,"item":null}},"dbl":{"outputs":{"result":2}},"small":{"outputs":{"result":true}},"end":{"outputs":{"result":1024,"history":{"count":10,"max":100,"frames":11,"lastEqualsResult":true},"count":10,"delta":512}},"view":{"outputs":{}},"count":{"outputs":{}}}}

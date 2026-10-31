@@ -1,0 +1,109 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Demo: Fold (running sum of 1..10)",
+  "description": "A Fold: walks a list and carries a running total through each item.",
+  "group": "Loop basics",
+  "nodes": [
+    {
+      "id": "items",
+      "type": "range",
+      "position": {
+        "x": 0,
+        "y": 190
+      },
+      "params": {
+        "count": 10,
+        "start": 1,
+        "step": 1
+      }
+    },
+    {
+      "id": "x0",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "value": 0,
+        "min": 0,
+        "max": 10
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "add",
+      "type": "math",
+      "position": {
+        "x": 520,
+        "y": 0
+      },
+      "params": {
+        "op": "+",
+        "a": 0,
+        "b": 0
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "params": {
+        "kind": "Fold",
+        "iterations": 150,
+        "tolerance": 0.002
+      }
+    },
+    {
+      "id": "view",
+      "type": "inspect",
+      "position": {
+        "x": 1080,
+        "y": 0
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "x0.value",
+      "to": "start.initial"
+    },
+    {
+      "from": "start.state",
+      "to": "add.a"
+    },
+    {
+      "from": "start.item",
+      "to": "add.b"
+    },
+    {
+      "from": "add.result",
+      "to": "end.result"
+    },
+    {
+      "from": "items.list",
+      "to": "end.items"
+    },
+    {
+      "from": "end.result",
+      "to": "view.value"
+    },
+    {
+      "from": "end.history",
+      "to": "view.history"
+    }
+  ]
+}

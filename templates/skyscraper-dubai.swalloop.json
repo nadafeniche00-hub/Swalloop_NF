@@ -1,0 +1,252 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Dubai plots",
+  "description": "The same loop on Dubai-like plots: fewer, taller neighbours and a sparser block.",
+  "group": "Skyscraper form-finding",
+  "nodes": [
+    {
+      "id": "ctx",
+      "type": "context",
+      "position": {
+        "x": 0,
+        "y": 360
+      },
+      "params": {
+        "style": "Dubai",
+        "ring": 3,
+        "heightScale": 1,
+        "seed": 11
+      }
+    },
+    {
+      "id": "tower",
+      "type": "tower",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "floors": 90,
+        "floorH": 4,
+        "width": 36,
+        "depth": 36,
+        "twist": 0,
+        "round": 0.2,
+        "source": "Initial"
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 300,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "wind",
+      "type": "wind",
+      "position": {
+        "x": 540,
+        "y": 0
+      },
+      "params": {
+        "speed": 38,
+        "from": 320,
+        "alpha": 0.25
+      }
+    },
+    {
+      "id": "stream",
+      "type": "orient",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "params": {
+        "rate": 0.2,
+        "aspect": 1.8,
+        "round": 0.8,
+        "sunWeight": 0.7,
+        "sunAz": 150,
+        "minW": 0,
+        "minD": 0,
+        "minRadius": 0,
+        "maxStep": 90,
+        "maxTwist": 0,
+        "smooth": 0,
+        "search": "Grid"
+      }
+    },
+    {
+      "id": "struct",
+      "type": "structure",
+      "position": {
+        "x": 1050,
+        "y": 0
+      },
+      "params": {
+        "allow": 6,
+        "load": 10,
+        "fraction": 0.08,
+        "relax": 0.3,
+        "minPlate": 20,
+        "maxPlate": 60
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 1330,
+        "y": 0
+      },
+      "params": {
+        "kind": "Repeat",
+        "iterations": 150,
+        "tolerance": 0
+      }
+    },
+    {
+      "id": "sun",
+      "type": "sun",
+      "position": {
+        "x": 1590,
+        "y": 0
+      },
+      "params": {
+        "azimuth": 150,
+        "altitude": 35
+      }
+    },
+    {
+      "id": "metrics",
+      "type": "metrics",
+      "position": {
+        "x": 1590,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "view",
+      "type": "viewer",
+      "position": {
+        "x": 1860,
+        "y": 0
+      },
+      "params": {
+        "color": "Utilisation",
+        "cmap": "Turbo",
+        "range": "Auto",
+        "min": 0,
+        "max": 1,
+        "reverse": "No"
+      }
+    },
+    {
+      "id": "r1",
+      "type": "readout",
+      "position": {
+        "x": 1860,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "r2",
+      "type": "readout",
+      "position": {
+        "x": 2080,
+        "y": 330
+      },
+      "params": {}
+    },
+    {
+      "id": "r3",
+      "type": "readout",
+      "position": {
+        "x": 1860,
+        "y": 440
+      },
+      "params": {}
+    },
+    {
+      "id": "r4",
+      "type": "readout",
+      "position": {
+        "x": 2080,
+        "y": 440
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "tower.tower",
+      "to": "start.initial"
+    },
+    {
+      "from": "start.state",
+      "to": "wind.tower"
+    },
+    {
+      "from": "ctx.context",
+      "to": "wind.context"
+    },
+    {
+      "from": "wind.tower",
+      "to": "stream.tower"
+    },
+    {
+      "from": "stream.tower",
+      "to": "struct.tower"
+    },
+    {
+      "from": "struct.tower",
+      "to": "end.result"
+    },
+    {
+      "from": "end.result",
+      "to": "sun.tower"
+    },
+    {
+      "from": "ctx.context",
+      "to": "sun.context"
+    },
+    {
+      "from": "sun.tower",
+      "to": "view.tower"
+    },
+    {
+      "from": "ctx.context",
+      "to": "view.context"
+    },
+    {
+      "from": "end.history",
+      "to": "view.history"
+    },
+    {
+      "from": "end.result",
+      "to": "metrics.tower"
+    },
+    {
+      "from": "metrics.gfa",
+      "to": "r1.value"
+    },
+    {
+      "from": "metrics.material",
+      "to": "r2.value"
+    },
+    {
+      "from": "metrics.moment",
+      "to": "r3.value"
+    },
+    {
+      "from": "metrics.util",
+      "to": "r4.value"
+    }
+  ]
+}

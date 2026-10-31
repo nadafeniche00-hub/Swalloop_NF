@@ -1,0 +1,43 @@
+{
+  "name": "swalloop_erst",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "app": "vite build && electron .",
+    "app:dev": "node scripts/app-dev.mjs",
+    "package": "vite build && electron-packager . Swalloop --platform=win32 --arch=x64 --out=release --overwrite --ignore=\"^/(src|scripts|node_modules|release|.claude|README.md|index.html|vite.config.js)\"",
+    "test": "node scripts/test-core.mjs",
+    "test:tower": "node scripts/test-tower.mjs",
+    "test:all": "node scripts/test-core.mjs && node scripts/test-tower.mjs && node scripts/test-templates.mjs && node scripts/test-analysis.mjs",
+    "test:templates": "node scripts/test-templates.mjs",
+    "golden": "node scripts/dump-golden.mjs",
+    "test:dotnet": "dotnet run --project dotnet/Swalloop.Core.Tests -nologo",
+    "test:parity": "node scripts/dump-golden.mjs && dotnet run --project dotnet/Swalloop.Core.Tests -nologo",
+    "gha:install": "powershell -ExecutionPolicy Bypass -File dotnet/install-gha.ps1",
+    "gha:verify": "powershell -ExecutionPolicy Bypass -File scripts/gh/verify.ps1",
+    "test:analysis": "node scripts/test-analysis.mjs",
+    "gha:canvases": "powershell -ExecutionPolicy Bypass -File scripts/gh/verify-canvases.ps1",
+    "gha:catalog": "node scripts/gen-gh-catalog.mjs",
+    "gha:menu": "powershell -ExecutionPolicy Bypass -File scripts/gh/verify-menu.ps1"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "@xyflow/react": "^12.12.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "electron": "^44.6.0",
+    "vite": "^8.3.3"
+  },
+  "main": "electron/main.cjs",
+  "description": "Swalloop: node-based loop form-finding for towers"
+}

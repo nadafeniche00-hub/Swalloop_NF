@@ -1,0 +1,1 @@
+{"name":"Demo: logistic map","nodes":{"x0":{"outputs":{"value":0.2}},"r":{"outputs":{"value":3.7}},"start":{"outputs":{"state":0.2,"index":0,"item":null}},"step":{"outputs":{"x":0.5920000000000001}},"end":{"outputs":{"result":0.8885419949430402,"history":{"count":120,"max":120,"frames":121,"lastEqualsResult":true},"count":120,"delta":0.28927712260514094}},"view":{"outputs":{}}}}

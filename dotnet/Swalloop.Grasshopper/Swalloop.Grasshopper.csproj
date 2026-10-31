@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The Grasshopper plugin. Output is Swalloop.gha (a renamed .dll) plus Swalloop.Core.dll next to it.
+
+    Two targets, because Rhino 8 can run plugins on .NET Framework 4.8 (the default) or on .NET 7/8
+    ("netcore" mode). Reference the oldest Grasshopper 8 package so the plugin loads on every 8.x.
+    The engine itself is Swalloop.Core (netstandard2.0), shared by both.
+  -->
+  <PropertyGroup>
+    <TargetFrameworks>net48;net7.0-windows</TargetFrameworks>
+    <LangVersion>10.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <UseWindowsForms>true</UseWindowsForms>
+    <AssemblyName>Swalloop</AssemblyName>
+    <RootNamespace>Swalloop.GH</RootNamespace>
+    <TargetExt>.gha</TargetExt>
+    <Version>0.1.0</Version>
+    <Company>Swalloop</Company>
+    <Product>Swalloop</Product>
+    <Description>Loops for Grasshopper that take off, travel and come home.</Description>
+    <Deterministic>true</Deterministic>
+    <!-- the Grasshopper package is built for .NET Framework; referencing it from net7.0-windows is the supported arrangement -->
+    <NoWarn>$(NoWarn);NU1701</NoWarn>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="8.0.23304.9001" ExcludeAssets="runtime" />
+    <ProjectReference Include="..\Swalloop.Core\Swalloop.Core.csproj" />
+  </ItemGroup>
+
+  <!-- The template files travel inside the plugin, so the Swalloop menu needs nothing on disk. -->
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\templates\*.swalloop.json" LogicalName="Swalloop.templates.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>

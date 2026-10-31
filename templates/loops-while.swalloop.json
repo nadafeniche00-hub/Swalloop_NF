@@ -1,0 +1,122 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Demo: While (double until 1000)",
+  "description": "A While loop: keeps doubling while the Condition holds.",
+  "group": "Loop basics",
+  "nodes": [
+    {
+      "id": "x0",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "value": 1,
+        "min": 1,
+        "max": 10
+      }
+    },
+    {
+      "id": "start",
+      "type": "loopStart",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "dbl",
+      "type": "math",
+      "position": {
+        "x": 520,
+        "y": 0
+      },
+      "params": {
+        "op": "×",
+        "a": 0,
+        "b": 2
+      }
+    },
+    {
+      "id": "small",
+      "type": "compare",
+      "position": {
+        "x": 520,
+        "y": 190
+      },
+      "params": {
+        "op": "<",
+        "a": 0,
+        "b": 1000
+      }
+    },
+    {
+      "id": "end",
+      "type": "loopEnd",
+      "position": {
+        "x": 800,
+        "y": 0
+      },
+      "params": {
+        "kind": "While",
+        "iterations": 100,
+        "tolerance": 0
+      }
+    },
+    {
+      "id": "view",
+      "type": "inspect",
+      "position": {
+        "x": 1080,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "count",
+      "type": "readout",
+      "position": {
+        "x": 1080,
+        "y": 190
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "x0.value",
+      "to": "start.initial"
+    },
+    {
+      "from": "start.state",
+      "to": "dbl.a"
+    },
+    {
+      "from": "dbl.result",
+      "to": "end.result"
+    },
+    {
+      "from": "start.state",
+      "to": "small.a"
+    },
+    {
+      "from": "small.result",
+      "to": "end.condition"
+    },
+    {
+      "from": "end.result",
+      "to": "view.value"
+    },
+    {
+      "from": "end.history",
+      "to": "view.history"
+    },
+    {
+      "from": "end.count",
+      "to": "count.value"
+    }
+  ]
+}

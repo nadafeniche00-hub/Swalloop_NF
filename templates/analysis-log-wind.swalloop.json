@@ -1,0 +1,220 @@
+{
+  "format": "swalloop-graph",
+  "version": 1,
+  "name": "Log wind profile",
+  "description": "The logarithmic wind profile for a terrain roughness, turned into a pressure profile and integrated: base shear and overturning moment per metre of width, and the power-law exponent that matches this terrain.",
+  "group": "Analysis and vision",
+  "nodes": [
+    {
+      "id": "z",
+      "type": "range",
+      "position": {
+        "x": 0,
+        "y": 0
+      },
+      "params": {
+        "count": 30,
+        "start": 10,
+        "step": 10
+      }
+    },
+    {
+      "id": "rough",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 200
+      },
+      "params": {
+        "value": 1,
+        "min": 0.01,
+        "max": 3
+      }
+    },
+    {
+      "id": "vref",
+      "type": "number",
+      "position": {
+        "x": 0,
+        "y": 330
+      },
+      "params": {
+        "value": 40,
+        "min": 10,
+        "max": 60
+      }
+    },
+    {
+      "id": "log",
+      "type": "logWind",
+      "position": {
+        "x": 280,
+        "y": 0
+      },
+      "params": {
+        "vRef": 40,
+        "zRef": 10,
+        "z0": 1
+      }
+    },
+    {
+      "id": "sq",
+      "type": "listMath",
+      "position": {
+        "x": 560,
+        "y": 0
+      },
+      "params": {
+        "op": "×",
+        "s": 1
+      }
+    },
+    {
+      "id": "q",
+      "type": "listMath",
+      "position": {
+        "x": 820,
+        "y": 0
+      },
+      "params": {
+        "op": "×",
+        "s": 0.0006125
+      }
+    },
+    {
+      "id": "shear",
+      "type": "integrate",
+      "position": {
+        "x": 1080,
+        "y": 0
+      },
+      "params": {
+        "method": "Simpson",
+        "weight": "f",
+        "x0": 0,
+        "dx": 1
+      }
+    },
+    {
+      "id": "mom",
+      "type": "integrate",
+      "position": {
+        "x": 1080,
+        "y": 230
+      },
+      "params": {
+        "method": "Simpson",
+        "weight": "x·f",
+        "x0": 0,
+        "dx": 1
+      }
+    },
+    {
+      "id": "speeds",
+      "type": "inspect",
+      "position": {
+        "x": 560,
+        "y": 260
+      },
+      "params": {}
+    },
+    {
+      "id": "pressure",
+      "type": "inspect",
+      "position": {
+        "x": 820,
+        "y": 260
+      },
+      "params": {}
+    },
+    {
+      "id": "r1",
+      "type": "readout",
+      "position": {
+        "x": 1360,
+        "y": 0
+      },
+      "params": {}
+    },
+    {
+      "id": "r2",
+      "type": "readout",
+      "position": {
+        "x": 1360,
+        "y": 110
+      },
+      "params": {}
+    },
+    {
+      "id": "r3",
+      "type": "readout",
+      "position": {
+        "x": 1360,
+        "y": 220
+      },
+      "params": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "z.list",
+      "to": "log.z"
+    },
+    {
+      "from": "rough.value",
+      "to": "log.z0"
+    },
+    {
+      "from": "vref.value",
+      "to": "log.vRef"
+    },
+    {
+      "from": "log.speed",
+      "to": "sq.a"
+    },
+    {
+      "from": "log.speed",
+      "to": "sq.b"
+    },
+    {
+      "from": "sq.result",
+      "to": "q.a"
+    },
+    {
+      "from": "q.result",
+      "to": "shear.y"
+    },
+    {
+      "from": "z.list",
+      "to": "shear.x"
+    },
+    {
+      "from": "q.result",
+      "to": "mom.y"
+    },
+    {
+      "from": "z.list",
+      "to": "mom.x"
+    },
+    {
+      "from": "log.speed",
+      "to": "speeds.value"
+    },
+    {
+      "from": "q.result",
+      "to": "pressure.value"
+    },
+    {
+      "from": "log.alpha",
+      "to": "r1.value"
+    },
+    {
+      "from": "shear.integral",
+      "to": "r2.value"
+    },
+    {
+      "from": "mom.integral",
+      "to": "r3.value"
+    }
+  ]
+}

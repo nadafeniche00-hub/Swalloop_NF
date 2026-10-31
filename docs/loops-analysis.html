@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Loops in Grasshopper: technical and UX analysis of Anemone and its peers</title>
+<style>
+  @page { size: A4; margin: 17mm 16mm 18mm 16mm; }
+  :root { --mid:#1B2A4A; --cream:#F4EBD6; --rust:#B5532B; --ink:#222B3A; --mute:#5B6577; --line:#D9D2C0; --green:#3E6B5C; --ochre:#8A6D1D; }
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { font: 9.6pt/1.5 "Segoe UI", system-ui, Arial, sans-serif; color: var(--ink); margin: 0; }
+  h1,h2,h3 { color: var(--mid); font-weight: 600; line-height: 1.2; margin: 0; }
+  h1 { font-size: 25pt; letter-spacing: -0.4px; }
+  h2 { font-size: 15pt; margin: 20pt 0 7pt; padding-bottom: 4pt; border-bottom: 2px solid var(--rust); break-after: avoid; }
+  h3 { font-size: 11pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 7pt; }
+  ul, ol { margin: 0 0 7pt; padding-left: 16pt; }
+  li { margin-bottom: 2.5pt; }
+  a { color: var(--mid); }
+  .cover { background: var(--mid); color: var(--cream); padding: 26pt 24pt 22pt; border-radius: 6px; margin-bottom: 14pt; }
+  .cover h1 { color: var(--cream); }
+  .cover .sub { color: #D5C9AC; font-size: 11.5pt; margin-top: 7pt; }
+  .cover .meta { margin-top: 16pt; font-size: 8.8pt; color: #C9BC9B; border-top: 1px solid #3B4B6C; padding-top: 8pt; }
+  .kicker { color: var(--rust); font-size: 8.5pt; letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 6pt; }
+  .box { background: var(--cream); border-left: 4px solid var(--rust); padding: 9pt 12pt; margin: 8pt 0 10pt; border-radius: 0 4px 4px 0; break-inside: avoid; }
+  .box.warn { background: #FBEDE6; }
+  .box p:last-child, .box ul:last-child { margin-bottom: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0 10pt; font-size: 8.5pt; }
+  th { background: var(--mid); color: var(--cream); text-align: left; padding: 5pt 6pt; font-weight: 600; }
+  td { padding: 5pt 6pt; border-bottom: 1px solid var(--line); vertical-align: top; }
+  tr:nth-child(even) td { background: #FAF6EC; }
+  tr { break-inside: avoid; }
+  .tag { display: inline-block; font-size: 7.6pt; font-weight: 600; padding: 0 4pt; border-radius: 3px; background: var(--mid); color: var(--cream); vertical-align: 1px; }
+  .tag.b { background: #6B7A99; } .tag.c { background: var(--ochre); }
+  .sev-h { color: var(--rust); font-weight: 600; } .sev-m { color: var(--ochre); font-weight: 600; } .sev-l { color: var(--mute); font-weight: 600; }
+  .swot { display: grid; grid-template-columns: 1fr 1fr; gap: 8pt; margin: 8pt 0 10pt; }
+  .swot > div { border-radius: 5px; padding: 9pt 11pt; break-inside: avoid; }
+  .swot h3 { margin: 0 0 5pt; color: inherit; font-size: 11pt; }
+  .swot ul { padding-left: 13pt; margin: 0; font-size: 8.8pt; }
+  .swot .s { background: var(--mid); color: var(--cream); }
+  .swot .w { background: var(--rust); color: #FFF4EA; }
+  .swot .o { background: var(--green); color: #F0F7F3; }
+  .swot .t { background: var(--ochre); color: #FFF8E4; }
+  .stat { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8pt; margin: 8pt 0 10pt; }
+  .stat div { border: 1px solid var(--line); border-top: 3px solid var(--rust); border-radius: 4px; padding: 7pt 8pt; break-inside: avoid; }
+  .stat b { display: block; font-size: 15pt; color: var(--mid); line-height: 1.1; }
+  .stat span { font-size: 8pt; color: var(--mute); }
+  .fig { margin: 8pt 0 10pt; break-inside: avoid; }
+  .fig .cap { font-size: 8.3pt; color: var(--mute); margin-top: 3pt; }
+  .small { font-size: 8.4pt; color: var(--mute); }
+  code { font: 8.6pt Consolas, monospace; background: #EFE9D8; padding: 0 3px; border-radius: 3px; }
+  .pb { break-before: page; }
+  .src li { font-size: 8.4pt; margin-bottom: 3pt; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="kicker" style="color:#E09A78">Swalloop · research brief</div>
+  <h1>How good are Grasshopper's loops?</h1>
+  <div class="sub">A technical and UX/UI analysis of Anemone and its peers, a SWOT, and recommendations for Swalloop</div>
+  <div class="meta">Prepared 14 October 2026 for MID 3010 "Loophole" (WiSe 26/27) &nbsp;·&nbsp; Evidence: McNeel Forum, Grasshopper3D archive, Food4Rhino, GitHub, course brief &nbsp;·&nbsp; Evidence grades: <b>A</b> author or official statement, <b>B</b> user report, <b>C</b> inference</div>
+</div>
+
+<h2 style="margin-top:6pt">1. Summary</h2>
+<div class="stat">
+  <div><b>0</b><span>formal, independent benchmarks of Grasshopper loops found</span></div>
+  <div><b>~10 yrs</b><span>Anemone without a release, until a Package Manager build in Mar 2026</span></div>
+  <div><b>38.2 s vs 45.2 s</b><span>FastLoop vs Python at Count = 400, one user, geometry-heavy</span></div>
+  <div><b>1</b><span>native alternative (GH2 looping clusters), still in beta</span></div>
+</div>
+<p><b>Bottom line.</b> Anemone won the community because its mental model is right: a visible <i>Start</i> and <i>End</i>, nesting, a <i>while</i> exit, and results that stay live in a definition. Its weaknesses are structural rather than cosmetic. It works <i>with</i> the Grasshopper solver, so every iteration is a full solver lap, and everything that also reacts to the solver (Galapagos, Colibri, clusters, data dams) can fall out of step with it. The code is closed and single-maintainer, and the "fast" variant that users rely on for speed was left out of the 2026 Package Manager build.</p>
+<ul>
+  <li><b>Efficiency is mostly a question of where the loop is evaluated.</b> Evaluating on the canvas costs a solver lap per iteration, and the one explicit speed lever users describe is not showing intermediate output ("Output after last").<span class="tag b">B</span> In geometry-heavy loops the body dominates and Anemone is on par with a Python script.<span class="tag b">B</span></li>
+  <li><b>The failures people report are about semantics, not speed:</b> partial data reaching downstream tools, loops restarting inside clusters, off-by-one stops, data-tree flattening, runaway loops with a hard-to-find pause.</li>
+  <li><b>UX is good at the first hour and weak at the tenth.</b> Two components read clearly, but status, stopping and modes are hidden or undocumented.</li>
+  <li><b>The window is real but narrowing.</b> GH2 ships native looping clusters; GH1 plugins do not load in GH2. A GH1 loop plugin therefore has to be excellent at what native loops will not do first: stopping rules, history, convergence and solver cooperation.</li>
+</ul>
+
+<h2>2. Scope, method and what I could not verify</h2>
+<div class="box warn">
+  <ul>
+    <li><b>Source code.</b> Anemone is distributed compiled. I found no public repository, and the course brief calls it closed-source. A source-level audit was therefore not possible; statements about internals are inferred from the changelog, forum answers and the Grasshopper solver API (grade <span class="tag c">C</span>). Hoopsnake has a public repo (<code>yconst/Hoopsnake</code>, CC BY-SA 3.0) but the page I could open shows only a compiled <code>.gha</code> and a one-line README.</li>
+    <li><b>Reddit</b> is blocked for my web tool, so no Reddit threads are included. The McNeel Forum and the archived Grasshopper3D forum carry the same discussions and are used instead.</li>
+    <li><b>Sources are summaries.</b> Pages were read through a summarising fetch tool, so wording is paraphrased, not copied. A few items (octopusLoop, the Decodes paper, older Rutten replies) reached me only as search snippets; they are marked.</li>
+    <li><b>Benchmarks are anecdotal.</b> Hardware and definitions are mostly unstated. Section 5 proposes a protocol that would replace them.</li>
+  </ul>
+</div>
+
+<h2>3. Why Grasshopper has no loops, and how plugins get around it</h2>
+<p>Grasshopper solves a directed acyclic graph: expired components recompute in dependency order, and a wire that would feed an output back into its own inputs is refused. David Rutten said native loops and recursion were "high on the list" but that clusters had to work first <span class="tag b">B</span>, and that cycle detection was intended to catch bad wiring <span class="tag b">B</span>. The three solver ideas that the course names (expiry, scheduling, state) are exactly what every loop plugin recombines:</p>
+<ul>
+  <li><b>Expiry:</b> marking an object and everything downstream as needing recomputation.</li>
+  <li><b>Scheduling:</b> asking for a new solution once the current one has finished; a callback fires just before it starts.</li>
+  <li><b>State:</b> data that survives from one solution to the next.</li>
+</ul>
+<p>Anemone's classic loop, as users describe it, keeps the state in Loop Start/Loop End and, when a solution completes, triggers another cycle: <i>"[it] waits until the current solution completed (all component expired are fully re-calculated), then it will trigger another cycle"</i> <span class="tag b">B</span>.</p>
+
+<div class="fig">
+<svg viewBox="0 0 700 170" width="100%" role="img" aria-label="Classic canvas-evaluated loop cycle">
+  <defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#1B2A4A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  <marker id="r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#B5532B" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+  <rect x="10" y="40" width="110" height="44" rx="6" fill="#1B2A4A"/><text x="65" y="67" text-anchor="middle" fill="#F4EBD6" font-size="13" font-family="Segoe UI,Arial">Loop Start</text>
+  <rect x="170" y="40" width="150" height="44" rx="6" fill="#F4EBD6" stroke="#1B2A4A"/><text x="245" y="67" text-anchor="middle" fill="#1B2A4A" font-size="13" font-family="Segoe UI,Arial">Body (your components)</text>
+  <rect x="370" y="40" width="110" height="44" rx="6" fill="#1B2A4A"/><text x="425" y="67" text-anchor="middle" fill="#F4EBD6" font-size="13" font-family="Segoe UI,Arial">Loop End</text>
+  <rect x="540" y="40" width="150" height="44" rx="6" fill="#F4EBD6" stroke="#B5532B" stroke-width="1.6"/><text x="615" y="60" text-anchor="middle" fill="#1B2A4A" font-size="12" font-family="Segoe UI,Arial">Exit / N reached?</text><text x="615" y="76" text-anchor="middle" fill="#5B6577" font-size="11" font-family="Segoe UI,Arial">yes: output</text>
+  <line x1="120" y1="62" x2="168" y2="62" stroke="#1B2A4A" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="320" y1="62" x2="368" y2="62" stroke="#1B2A4A" stroke-width="1.6" marker-end="url(#a)"/>
+  <line x1="480" y1="62" x2="538" y2="62" stroke="#1B2A4A" stroke-width="1.6" marker-end="url(#a)"/>
+  <path d="M615 84 V132 H65 V86" fill="none" stroke="#B5532B" stroke-width="1.8" marker-end="url(#r)"/>
+  <text x="340" y="124" text-anchor="middle" fill="#B5532B" font-size="12" font-weight="600" font-family="Segoe UI,Arial">no: wait for solution to finish, schedule a new one, expire Start and everything downstream</text>
+  <text x="340" y="152" text-anchor="middle" fill="#5B6577" font-size="11" font-family="Segoe UI,Arial">each lap = one full solver pass over the loop body, plus canvas and preview refresh</text>
+</svg>
+<div class="cap">Figure 1. The canvas-evaluated loop model (Anemone classic, Hoopsnake-style). Redrawn from forum descriptions and the solver API notes; grade C.</div>
+</div>
+<p>The alternative is to take the body <i>off</i> the canvas and iterate it internally, which is what Anemone's FastLoop appears to do (users report it runs after the loops are done and defaults to "Output after last") and what octopusLoop does explicitly, evaluating the loop in a separate hidden context and claiming up to 1000× speed-ups <span class="tag b">B</span><span class="small"> (search snippet)</span>. The price is solver independence: the loop no longer takes part in the normal expire/solve conversation, which is why FastLoop is the variant that works inside clusters and with Galapagos <span class="tag b">B</span>, and why it is hard to debug.</p>
+
+<h2>4. The landscape</h2>
+<table>
+<tr><th style="width:15%">Option</th><th style="width:25%">Evaluation model</th><th style="width:30%">Strengths (reported)</th><th style="width:30%">Limits and status</th></tr>
+<tr><td><b>Anemone classic</b><br><span class="small">M. Zwierzycki</span></td><td>Start/End pair; canvas-evaluated, one solver lap per iteration</td><td>Intuitive; nested loops; <i>while</i> via Exit input; pause; Browse History; expandable data streams; live in a definition <span class="tag b">B</span></td><td>Closed source; ~10 years without update; tied to solver timing; trees and stop semantics surprise users. In Package Manager since 24 Mar 2026 <span class="tag a">A</span></td></tr>
+<tr><td><b>Anemone FastLoop</b></td><td>Iterates internally; "Output after last"</td><td>Fastest option in user reports; works in clusters and with Galapagos/Colibri <span class="tag b">B</span></td><td>Nesting doubted by users; one user measured 5 s for an empty loop (2018); <b>not in the 2026 package</b>, reason unanswered <span class="tag a">A</span></td></tr>
+<tr><td><b>Hoopsnake</b><br><span class="small">yconst</span></td><td>One component copies its input and feeds it back, bypassing the recursion check <span class="tag b">B</span></td><td>Keeps data order reliably; lets you see each iteration <span class="tag b">B</span></td><td>Keeps every cycle in memory with no switch to turn that off; reported unsupported; installing it in Rhino 7 drew a 53-reply forum thread <span class="tag b">B</span></td></tr>
+<tr><td><b>octopusLoop</b><br><span class="small">Vierlinger et al.</span></td><td>Body evaluated in a separate hidden context</td><td>Large claimed speed-ups; compatible with Galapagos/Octopus/Goat <span class="tag b">B</span></td><td>Early stage, nesting listed as a known issue (search snippet; page not opened)</td></tr>
+<tr><td><b>Script components</b><br><span class="small">Python / C#</span></td><td>An ordinary <code>for</code> loop inside one component</td><td>Full control; no solver coupling; "just as easy" for many tasks, per one forum user <span class="tag b">B</span></td><td>Gives up visual data flow and non-coder access, which is why Anemone exists <span class="tag b">B</span></td></tr>
+<tr><td><b>GH2 looping cluster</b></td><td>Cluster routes an output back to an input; <i>Loop Repeats</i> pin sets the count</td><td>Native; reduces data-tree struggle for many-object cases; recursion-capable per Anemone's author <span class="tag b">B</span></td><td>GH2 is in the Rhino beta; GH1 plugins do not load; crash reports in the beta thread; release timing speculative <span class="tag b">B</span></td></tr>
+</table>
+
+<h2>5. Technical efficiency analysis</h2>
+<h3>5.1 Where the time goes (model)</h3>
+<p>For a canvas-evaluated loop, total time is approximately <code>N × (T_solver_lap + T_body + T_refresh)</code> plus the growth of whatever is recorded. An internally evaluated loop is <code>N × T_body + T_setup</code>. This is grade C, but it explains every data point below.</p>
+<table>
+<tr><th style="width:24%">Factor</th><th>What the evidence says</th><th style="width:8%">Grade</th></tr>
+<tr><td><b>Body cost</b></td><td>Subtracting 400 cones with booleans: Python 45.2 s, FastLoop 38.2 s (July 2025). FastLoop gets relatively faster as Count grows. Hardware and exact file not stated. In this case the geometry, not the loop, is the cost.</td><td><span class="tag b">B</span></td></tr>
+<tr><td><b>Fixed per-lap cost</b></td><td>"Fast Loop End" taking over 5 s with no data (May 2018, no cause found). A simple number-series loop at about 1 s per pass (Jan 2019, unresolved). A paper on the Decodes plugin reports ~36 s for 1000 mirror iterations in Anemone against 0.032 s for Decodes (search snippet; paper not opened).</td><td><span class="tag b">B</span></td></tr>
+<tr><td><b>Intermediate output</b></td><td>"Output after last" is described by a user as "part of the trick to make it fast".</td><td><span class="tag b">B</span></td></tr>
+<tr><td><b>Data growth</b></td><td>Hoopsnake retains every cycle; unmanaged paths that grow by a digit per lap (around 100 digits) slow definitions. Anemone only prepends one integer, and only on recorded loop-end outputs.</td><td><span class="tag b">B</span></td></tr>
+<tr><td><b>Referenced geometry</b></td><td>A definition ran slowly with referenced geometry and sped up after re-internalising; a second user reproduced it. Cause not established; likely repeated fetching of Rhino geometry each lap.</td><td><span class="tag b">B</span> / <span class="tag c">C</span></td></tr>
+<tr><td><b>Faster than consumers</b></td><td>A loop produced 2 to 4 times more data than the Kangaroo-based consumer could compute, putting streams out of sync (June 2024).</td><td><span class="tag b">B</span></td></tr>
+</table>
+<div class="box"><p><b>Reading.</b> Loop overhead matters most for cheap bodies and large N (simulation, iteration of arithmetic). When the body is expensive, the plugin barely matters and the architecture question becomes <i>correctness and cooperation</i>, not speed. That is where Swalloop can differ most.</p></div>
+
+<h3>5.2 Proposed benchmark protocol</h3>
+<p>No independent benchmark exists, so one should be created and published with the plugin.</p>
+<table>
+<tr><th style="width:22%">Workload</th><th>Body</th><th style="width:28%">N</th><th style="width:26%">Measured</th></tr>
+<tr><td>Trivial</td><td>Number update (logistic map, Newton)</td><td>100, 1 000, 10 000</td><td>Per-lap overhead</td></tr>
+<tr><td>Medium</td><td>Curve blend / offset, ~50 curves</td><td>50, 200, 1 000</td><td>Lap cost vs body cost</td></tr>
+<tr><td>Heavy</td><td>Boolean difference per lap (the 400-cone case)</td><td>100, 400</td><td>Does loop choice matter?</td></tr>
+<tr><td>Coupled</td><td>Loop under Galapagos / Colibri, and inside a cluster</td><td>fixed</td><td>Correctness (data complete?), not time</td></tr>
+</table>
+<p class="small">Compare: Anemone classic, Anemone FastLoop (from the pre-2026 download), Hoopsnake, a Python script, GH2 looping cluster, Swalloop. Record Rhino, CPU, preview on/off, and median of 5 runs.</p>
+
+<h2>6. Failure modes users actually hit</h2>
+<table>
+<tr><th style="width:4%">#</th><th style="width:22%">Symptom</th><th style="width:36%">Cause (as understood)</th><th style="width:8%">Impact</th><th>Evidence</th></tr>
+<tr><td>1</td><td>Downstream tool captures only the first iteration, or Galapagos "freezes"</td><td>Colibri / Galapagos do not wait for the loop; a Data Dam expires nothing, so the loop does not wait for it either. Time Buffer did not help.</td><td class="sev-h">High</td><td>Colibri threads 2020–2024; data-sync thread Jun 2024</td></tr>
+<tr><td>2</td><td>Loop restarts or records only once inside a cluster</td><td>Clusters solve once per solution, so a canvas loop restarts each time. FastLoop avoids it.</td><td class="sev-h">High</td><td>Colibri thread; forum reply</td></tr>
+<tr><td>3</td><td>Output has one extra, invalid value; "No data collected" if the exit is true at the start</td><td>The value enters the loop before the exit condition is checked, so the output is the one that failed the test.</td><td class="sev-m">Medium</td><td>Loop-not-counting thread, Mar 2022</td></tr>
+<tr><td>4</td><td>Loop stops early or loses branches</td><td>A multi-branch tree wired to the single Loop End input is flattened and only the first value kept; invalid self-wiring in "recursion" attempts.</td><td class="sev-m">Medium</td><td>Forum comments; Recursion thread Jun 2019</td></tr>
+<tr><td>5</td><td>Loop "never stops" or keeps recording; user cannot find the pause</td><td>Exit input is optional, timeout is optional, and pause is a double-click on Loop End that users report not knowing about.</td><td class="sev-h">High</td><td>Same-data thread Mar 2023; changelog</td></tr>
+<tr><td>6</td><td>Slow even for trivial bodies</td><td>Unexplained per-lap cost; internalisation; component count in the definition.</td><td class="sev-m">Medium</td><td>Threads May 2018, Jan 2019</td></tr>
+<tr><td>7</td><td>Nested loops hard to reason about</td><td>Pairing and per-level data paths are implicit; users debate whether a list method would be simpler.</td><td class="sev-l">Low</td><td>Double-loop thread Dec 2025</td></tr>
+<tr><td>8</td><td>Sharing a definition fails or needs manual unblock</td><td>Compiled <code>.gha</code> predates the Package Manager; example links were reported broken in 2020.</td><td class="sev-m">Medium</td><td>"The Anemone problem" Jul 2025; Recursion thread</td></tr>
+<tr><td>9</td><td>Plugin could break with a Rhino/.NET update</td><td>Closed source, one maintainer, "no incentive to update" while it works (his words, Jul 2025).</td><td class="sev-h">High</td><td>"The Anemone problem"</td></tr>
+</table>
+
+<h2>7. UX / UI analysis</h2>
+<p>Judged against standard usability heuristics. The two-component layout is a genuine strength; the weaknesses cluster around <i>status</i>, <i>stopping</i> and <i>documentation</i>.</p>
+<table>
+<tr><th style="width:21%">Heuristic</th><th style="width:12%">Verdict</th><th>Observation</th></tr>
+<tr><td>Match to real world</td><td class="sev-l" style="color:#3E6B5C">Strong</td><td>Start / End reads like a programmer's loop; users call it "more intuitive" than the single-component Hoopsnake and a cleaner layout.</td></tr>
+<tr><td>Visibility of status</td><td class="sev-h">Weak</td><td>The counter is an output, not a state. No built-in "running / converged / stopped by timeout" indicator; an unbounded loop looks the same as a busy one.</td></tr>
+<tr><td>User control and freedom</td><td class="sev-m">Mixed</td><td>Pause, Exit and timeout exist, but pause is a double-click and the timeout is optional, so control is available yet not discoverable.</td></tr>
+<tr><td>Consistency</td><td class="sev-m">Mixed</td><td>Changing Repeats no longer restarts the loop (0.2), which is useful but not obvious; Start and End must have matching data counts.</td></tr>
+<tr><td>Error prevention</td><td class="sev-m">Mixed</td><td>Mismatched Start/End inputs raise an error, which is good. Silent flattening of trees and the off-by-one stop are not caught.</td></tr>
+<tr><td>Recognition over recall</td><td class="sev-h">Weak</td><td>Loop modes (fast, internalized), Time Buffer, Record and Output-after-last are named in the changelog but not explained on the project page.</td></tr>
+<tr><td>Debuggability</td><td class="sev-m">Mixed</td><td>Browse History (0.26) helps; Hoopsnake users valued seeing every iteration. No per-iteration timing or convergence view.</td></tr>
+<tr><td>Help and documentation</td><td class="sev-h">Weak</td><td>Changelog-style documentation, example files hosted off-site, license and source status unstated.</td></tr>
+<tr><td>Installation and sharing</td><td class="sev-m">Improving</td><td>Manual unblock and install for a decade; Package Manager build since March 2026, classic components only.</td></tr>
+</table>
+
+<h2 class="pb">8. SWOT</h2>
+<p class="small">Subject: the existing Grasshopper 1 loop ecosystem, with Anemone as the reference implementation.</p>
+<div class="swot">
+  <div class="s"><h3>Strengths</h3><ul>
+    <li>Right mental model: visible Start/End, nesting, <i>while</i> via Exit</li>
+    <li>Live inside a definition; re-runs when upstream changes</li>
+    <li>Pause, timeout, history browsing present</li>
+    <li>Competitive with Python on geometry-heavy bodies (38.2 s vs 45.2 s at N = 400, one user)</li>
+    <li>Large, helpful community and a decade of examples</li>
+    <li>Reported as dependable: "has never failed me"</li>
+  </ul></div>
+  <div class="w"><h3>Weaknesses</h3><ul>
+    <li>Closed source, single maintainer, ~10 years without release</li>
+    <li>Canvas evaluation couples the loop to solver timing</li>
+    <li>Fixed per-lap cost; unexplained slowdowns</li>
+    <li>Surprising semantics: off-by-one stop, tree flattening, recording paths</li>
+    <li>Hidden controls (pause) and under-documented modes</li>
+    <li>FastLoop not in the 2026 package</li>
+    <li>Manual install friction for most of its life</li>
+  </ul></div>
+  <div class="o"><h3>Opportunities</h3><ul>
+    <li>An open, tested, documented GH1 loop plugin: the gap the course brief itself names</li>
+    <li>First-class convergence, history and status that none of the options offer</li>
+    <li>Explicit solver cooperation (a "done" signal) for Galapagos and Colibri workflows</li>
+    <li>One semantic with two execution modes (inspect vs run)</li>
+    <li>Package Manager, example files and a published benchmark as differentiators</li>
+    <li>GH1 users stay on GH1 for production while GH2 is in beta</li>
+  </ul></div>
+  <div class="t"><h3>Threats</h3><ul>
+    <li>GH2 native looping clusters may absorb the common use cases</li>
+    <li>GH1 plugins do not load in GH2: the ecosystem is splitting</li>
+    <li>Rhino or .NET updates can break an unmaintained compiled plugin</li>
+    <li>Python/C# loops are "just as easy" for many users, and AI assistants write them on demand</li>
+    <li>Fast, internal evaluators (octopusLoop) set a high speed expectation</li>
+    <li>Reputation: a new loop plugin inherits users' fear of hangs and lost data</li>
+  </ul></div>
+</div>
+
+<h2>9. Recommendations for Swalloop</h2>
+<p>Ordered by how much they change the architecture, so the first group should be decided <i>before</i> the team's shared repository is scaffolded. Items marked ✓ are already in the prototype (<code>swalloop_erst</code>) and should be carried over as requirements, not re-invented.</p>
+
+<h3>Decide now (architecture)</h3>
+<table>
+<tr><th style="width:4%">#</th><th style="width:28%">Recommendation</th><th>Why, and what it fixes</th><th style="width:12%">Failure modes</th></tr>
+<tr><td>1</td><td><b>One loop semantic, two execution modes.</b> <i>Inspect</i>: canvas-visible, per-iteration. <i>Run</i>: internal, output-after-last. A test asserts identical results.</td><td>Gives Anemone's debuggability and FastLoop's speed without two plugins and without users guessing which to trust.</td><td>5, 6</td></tr>
+<tr><td>2</td><td><b>Define stop semantics once, in writing.</b> ✓ Condition evaluated at the start of each pass on the current state; ✓ tolerance in the data type's own units; return a <i>status</i> (converged, max reached, condition, cancelled).</td><td>Removes the off-by-one family and lets downstream logic react to <i>why</i> a loop ended.</td><td>3, 5</td></tr>
+<tr><td>3</td><td><b>Solver cooperation contract.</b> A "done" output that is false until the loop finishes, correct expiry so that Galapagos / Colibri / data dams wait, and a documented pattern for clusters. Test with Galapagos in CI.</td><td>The most-reported real-world breakage; nobody currently solves it deliberately.</td><td>1, 2</td></tr>
+<tr><td>4</td><td><b>Host-independent core, thin GH1 adapter.</b> ✓ The engine already knows nothing about towers; extend that to "knows nothing about Grasshopper".</td><td>Makes a GH2 port and unit tests possible, and answers the maintainability threat.</td><td>9</td></tr>
+</table>
+
+<h3>Build into the component (UX)</h3>
+<table>
+<tr><th style="width:4%">#</th><th style="width:28%">Recommendation</th><th>Why, and what it fixes</th><th style="width:12%">Failure modes</th></tr>
+<tr><td>5</td><td><b>Safe by default.</b> A finite default Max iter, a Stop button on the component face (not a hidden double-click), and an optional wall-clock timeout.</td><td>An unbounded loop must never be one slider move away.</td><td>5</td></tr>
+<tr><td>6</td><td><b>Visible state.</b> Face shows lap counter, change per lap, and status badge (running, converged, capped). Show "Loop · number" type as the prototype does ✓.</td><td>Replaces guessing with reading.</td><td>5, 6</td></tr>
+<tr><td>7</td><td><b>Explicit data-tree contract.</b> No silent flattening; paths preserved; branch index added only when Record is on, and documented. Typed wires ✓ that turn red when types stop fitting.</td><td>Targets the "lost branches" and growing-path complaints.</td><td>4</td></tr>
+<tr><td>8</td><td><b>History as a typed output.</b> ✓ <code>{ frames, count, max }</code> plus per-iteration timing, and a convergence curve in the inspector ✓.</td><td>Hoopsnake users valued iteration visibility; make it default, not an add-on.</td><td>6</td></tr>
+<tr><td>9</td><td><b>Errors that say what to do.</b> "Loop End has 3 data inputs, Loop Start has 2. Add one input to Start." Warn when a tree is wired into a single-value input.</td><td>Turns silent failures into guidance.</td><td>3, 4</td></tr>
+<tr><td>10</td><td><b>Nested pairing you can see.</b> ✓ Nearest unclaimed Start upstream; additionally highlight the paired Start when End is selected.</td><td>Reduces the implicit-pairing confusion.</td><td>7</td></tr>
+</table>
+
+<h3>Release engineering (the course's fifth subject)</h3>
+<ul>
+  <li><b>Ship through the Package Manager from the first release</b>, with semantic versioning, an open licence stated in the README and manifest, and example files <i>inside</i> the package (no off-site links).</li>
+  <li><b>Publish the benchmark</b> from Section 5.2 with the release, including cases where Swalloop is not the fastest. Credibility is the main asset a loop plugin lacks.</li>
+  <li><b>Document every mode and option on the page where users read first</b>, not only in a changelog; the prototype's README table of loop kinds is a good template.</li>
+  <li><b>Name and brand with intent.</b> The swallow metaphor (take-off, return, migration, nest) can carry component names, tooltips and icons consistently, which also helps recognition over recall.</li>
+</ul>
+
+<h2>10. Open questions to validate</h2>
+<ol>
+  <li>How does FastLoop actually iterate (own sub-document, or re-entrant solve)? Decompiling is a licence question; asking the author or measuring behaviour is safer.</li>
+  <li>What is Anemone's real per-lap cost on Rhino 8 with the 2026 build? A benchmark run (Section 5.2) answers this for the classic components.</li>
+  <li>Does a GH1 plugin gain anything by also exposing its loop as a cluster-compatible component for GH2 later?</li>
+  <li>Which of failure modes 1 and 2 can be fixed in GH1 without private APIs?</li>
+</ol>
+
+<h2>Sources</h2>
+<p class="small">Grades: A author or official, B user report, C inference. Items marked † were read only as search snippets or could not be opened.</p>
+<ol class="src">
+  <li>Anemone group page and changelog, Grasshopper3D. <a href="https://www.grasshopper3d.com/group/anemone">grasshopper3d.com/group/anemone</a></li>
+  <li>"The Anemone problem", McNeel Forum, Jul 2025 to Mar 2026 (maintainer statements, benchmark, Package Manager release). <a href="https://discourse.mcneel.com/t/the-anemone-problem/206615">discourse.mcneel.com/t/the-anemone-problem/206615</a></li>
+  <li>"Anemone very slow, when data is not internalized", Jan 2019. <a href="https://discourse.mcneel.com/t/anemone-very-slow-when-data-is-not-internalized/77008">discourse.mcneel.com/t/…/77008</a></li>
+  <li>"Anemone's 'Fast loop end' is… slow", May 2018. <a href="https://discourse.mcneel.com/t/anemones-fast-loop-end-is-slow/63573">discourse.mcneel.com/t/…/63573</a></li>
+  <li>"Combining Anemone and Colibri", 2020 to 2022. <a href="https://discourse.mcneel.com/t/combining-anemone-and-colibri/99181">discourse.mcneel.com/t/…/99181</a></li>
+  <li>"Data sync issue in Anemone", Jun 2024. <a href="https://discourse.mcneel.com/t/data-sync-issue-in-anemone/184544">discourse.mcneel.com/t/…/184544</a></li>
+  <li>"Anemone Loop not counting right?", Mar 2022. <a href="https://discourse.mcneel.com/t/anemone-loop-not-counting-right/139384">discourse.mcneel.com/t/…/139384</a></li>
+  <li>"Anemone loop same data", Mar 2023. <a href="https://discourse.mcneel.com/t/anemone-loop-same-data/156645">discourse.mcneel.com/t/…/156645</a></li>
+  <li>"Recursion in Anemone", Jun 2019. <a href="https://discourse.mcneel.com/t/recursion-in-anemone/84571">discourse.mcneel.com/t/…/84571</a></li>
+  <li>"Double loop with anemone", Dec 2025. <a href="https://discourse.mcneel.com/t/double-loop-with-anemone/213841">discourse.mcneel.com/t/…/213841</a></li>
+  <li>"Anemone or other plugin to do grasshopper procedural loops in Rhino 8?", Jan 2025. <a href="https://discourse.mcneel.com/t/anemone-or-other-plugin-to-do-grasshopper-procedural-loops-in-rhino-8/198464">discourse.mcneel.com/t/…/198464</a></li>
+  <li>"Rhino Beta Feature: Grasshopper 2 (Beta)", Jul 2026. <a href="https://discourse.mcneel.com/t/rhino-beta-feature-grasshopper-2-beta/221336">discourse.mcneel.com/t/…/221336</a></li>
+  <li>"Looping Cluster Example for Grasshopper2", Nov 2025. <a href="https://discourse.mcneel.com/t/looping-cluster-example-for-grasshopper2/212536">discourse.mcneel.com/t/…/212536</a></li>
+  <li>Hoopsnake repository, <code>yconst/Hoopsnake</code>. <a href="https://github.com/yconst/Hoopsnake">github.com/yconst/Hoopsnake</a></li>
+  <li>† Hoopsnake vs Anemone comparison comments, Grasshopper3D archive (search snippets). <a href="https://www.grasshopper3d.com/xn/detail/2985220:Comment:989099">…Comment:989099</a>, <a href="https://www.grasshopper3d.com/xn/detail/2985220:Comment:1429486">…Comment:1429486</a></li>
+  <li>† octopusLoop, Food4Rhino (page returned 403; description via search results). <a href="https://www.food4rhino.com/en/app/octopusloop">food4rhino.com/en/app/octopusloop</a></li>
+  <li>† "Iterative Pattern Design via Decodes Python Scripts in Grasshopper" (benchmark via search snippet). <a href="https://www.academia.edu/43110913/Iterative_Pattern_Design_via_Decodes_Python_Scripts_in_Grasshopper">academia.edu/43110913</a></li>
+  <li>† D. Rutten replies on solver scheduling and loop plans, Grasshopper3D archive (search snippets). <a href="https://www.grasshopper3d.com/xn/detail/2985220:Comment:918643">…Comment:918643</a></li>
+  <li>MID 3010 course brief "Loophole", WiSe 26/27 (project_definition.pdf, updated 13 Oct 2026).</li>
+</ol>
+</body>
+</html>
